@@ -2,7 +2,10 @@
   "name": "api-middleware-response",
   "version": "0.0.1",
   "description": "middleware for api http response",
-  "main": "index.js",
+  "main": "./index.js",
   "author": "Renato Oda",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.15.2"
+  }
 }
