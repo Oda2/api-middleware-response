@@ -1,0 +1,8 @@
+{
+  "name": "api-middleware-response",
+  "version": "0.0.1",
+  "description": "middleware for api http response",
+  "main": "index.js",
+  "author": "Renato Oda",
+  "license": "MIT"
+}
