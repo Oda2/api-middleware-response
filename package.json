@@ -1,10 +1,16 @@
 {
   "name": "api-middleware-response",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "middleware for api http response",
   "main": "./index.js",
   "author": "Renato Oda",
+  "homepage": "https://github.com/Oda2/api-middleware-response",
+  "keywords": ["response", "json", "api", "middleware"],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Oda2/api-middleware-response.git"
+  },
   "devDependencies": {
     "express": "^4.15.2"
   }
