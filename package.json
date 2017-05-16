@@ -1,17 +1,28 @@
 {
   "name": "api-middleware-response",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "middleware for api http response",
   "main": "./index.js",
   "author": "Renato Oda",
   "homepage": "https://github.com/Oda2/api-middleware-response",
-  "keywords": ["response", "json", "api", "middleware"],
+  "keywords": [
+    "response",
+    "json",
+    "api",
+    "middleware"
+  ],
+  "scripts": {
+    "dev": "gulp"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/Oda2/api-middleware-response.git"
   },
   "devDependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
+    "typescript": "^2.3.2"
   }
 }
