@@ -82,16 +82,18 @@ export class ReturnBase {
     return this.returnJson();
   }
 
-  public setArrayObject(data: any, statusCode?: number): any {
-    this.data = data;
+  public setArrayObject(data: any, statusCode?: number): any {    
     this.success = true;
     this.isArray = true;
 
-    if ((this.data.count) &&  (this.data.rows)) {
+    if ((this.data.count) && (this.data.rows)) {
+      this.data = data.rows;
       this.count = this.data.count;
     } else if ((this.data.length) && (this.data.length > 0)) {
+      this.data = data;
       this.count = this.data.length;
     } else if (this.data.rows) {
+      this.data = data.rows;
       this.count = this.data.rows;
     } else {
       throw new RangeError("invalid arguments");

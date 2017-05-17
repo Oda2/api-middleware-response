@@ -1,6 +1,6 @@
 {
   "name": "api-middleware-response",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "middleware for api http response",
   "main": "./index.js",
   "author": "Renato Oda",
