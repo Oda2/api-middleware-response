@@ -93,11 +93,13 @@ class ReturnBase {
         return this.self.res.status(this.statusCode).json({});
     }
     setAccepted() {
+        this.data = {};
         this.success = true;
         this.statusCode = 202;
         return this.returnNoContent();
     }
     setDeleteResource() {
+        this.data = {};
         this.success = true;
         this.statusCode = 204;
         return this.returnNoContent();
@@ -106,6 +108,7 @@ class ReturnBase {
         return this.setDeleteResource();
     }
     setInvalidRequest(message, statusCode) {
+        this.data = {};
         this.success = false;
         this.message = message;
         if (statusCode) {
@@ -117,14 +120,14 @@ class ReturnBase {
         return this.returnJson();
     }
     setDataNotFound() {
+        this.data = {};
         this.success = false;
         this.statusCode = 404;
-        this.data = {};
         return this.returnJson();
     }
     setInternalServerError(message) {
-        this.success = false;
         this.data = {};
+        this.success = false;
         this.statusCode = 500;
         this.message = message;
         return this.returnJson();

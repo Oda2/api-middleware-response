@@ -111,12 +111,14 @@ export class ReturnBase {
   }
 
   public setAccepted(): any {
+    this.data = {};
     this.success = true;
     this.statusCode = 202;
     return this.returnNoContent();
   }
 
   public setDeleteResource(): any {
+    this.data = {};
     this.success = true;
     this.statusCode = 204;
     return this.returnNoContent();
@@ -127,6 +129,7 @@ export class ReturnBase {
   }
 
   public setInvalidRequest(message: string, statusCode?:number): any {
+    this.data = {};
     this.success = false;
     this.message = message;
     
@@ -140,15 +143,15 @@ export class ReturnBase {
   }
 
   public setDataNotFound(): any {
-    this.success = false;
-    this.statusCode = 404;
     this.data = {};
+    this.success = false;
+    this.statusCode = 404;    
     return this.returnJson();
   }
 
   public setInternalServerError(message?:string) {
-    this.success = false;
     this.data = {};
+    this.success = false;
     this.statusCode = 500;
     this.message = message;
     return this.returnJson();
