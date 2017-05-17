@@ -5,8 +5,8 @@ const middlewareExpress = function middlewareExpress(req, res, next) {
     res.data = new returnbase_1.ReturnBase({ req, res, next });
     next();
 };
-function middleware() {
+function apiresponse() {
     return middlewareExpress;
 }
-exports.middleware = middleware;
+exports.apiresponse = apiresponse;
 ;

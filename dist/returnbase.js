@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
 class ReturnBase {
     constructor(self) {
         this.self = self;
@@ -66,17 +67,15 @@ class ReturnBase {
         return this.returnJson();
     }
     setArrayObject(data, statusCode) {
-        this.data = data;
         this.success = true;
         this.isArray = true;
-        if ((this.data.count) && (this.data.rows)) {
-            this.count = this.data.count;
+        if (_.isArray(data)) {
+            this.data = data;
+            this.count = data.length;
         }
-        else if ((this.data.length) && (this.data.length > 0)) {
-            this.count = this.data.length;
-        }
-        else if (this.data.rows) {
-            this.count = this.data.rows;
+        else if ((data) && (data.rows)) {
+            this.data = data.rows;
+            this.count = data.count;
         }
         else {
             throw new RangeError("invalid arguments");

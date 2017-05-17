@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 export class ReturnBase {
   constructor(public self: any) {}
 
@@ -86,15 +88,12 @@ export class ReturnBase {
     this.success = true;
     this.isArray = true;
 
-    if ((this.data.count) && (this.data.rows)) {
-      this.data = data.rows;
-      this.count = this.data.count;
-    } else if ((this.data.length) && (this.data.length > 0)) {
+    if (_.isArray(data)) {
       this.data = data;
-      this.count = this.data.length;
-    } else if (this.data.rows) {
+      this.count = data.length;
+    } else if ((data) && (data.rows)) {
       this.data = data.rows;
-      this.count = this.data.rows;
+      this.count = data.count;
     } else {
       throw new RangeError("invalid arguments");
     }

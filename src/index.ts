@@ -5,6 +5,6 @@ const middlewareExpress = function middlewareExpress(req, res, next): void {
   next();
 }
 
-export function middleware() {
+export function apiresponse() {
   return middlewareExpress;
 };
