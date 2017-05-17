@@ -12,7 +12,8 @@
     "middleware"
   ],
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "test": "mocha"
   },
   "license": "MIT",
   "repository": {
@@ -23,6 +24,8 @@
     "express": "^4.15.2",
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.6",
+    "mocha": "^3.4.1",
+    "supertest": "^3.0.0",
     "typescript": "^2.3.2"
   }
 }
