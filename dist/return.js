@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
-class ReturnBase {
-    constructor(self) {
+class Return {
+    constructor(self, options) {
         this.self = self;
+        this.options = options;
         this.success = false;
         this.isArray = false;
     }
@@ -34,10 +35,11 @@ class ReturnBase {
     }
     serializeArray() {
         let pages = 0;
+        this.limit = this.options.limit;
         if (this.count > 0 && this.limit > 0) {
             pages = Math.ceil((this.count / this.limit));
         }
-        let currentPage = (pages + 1);
+        let currentPage = (this.page + 1);
         /* TO-DO Custom return */
         return {
             success: this.success,
@@ -132,4 +134,4 @@ class ReturnBase {
         return this.returnJson();
     }
 }
-exports.ReturnBase = ReturnBase;
+exports.Return = Return;

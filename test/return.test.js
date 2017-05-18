@@ -10,7 +10,7 @@ describe('app', () => {
   
   it('object default', (done) => {  
     app.get('/object', (req, res, next) => {
-      return res.data.setObject({"id": "10"}, 200);
+      return res.data.setObject({"id": "10"}, 200)
     })
 
     request(app)
@@ -43,7 +43,7 @@ describe('app', () => {
     })
 
     request(app)
-      .get('/array/sequelize')
+      .get('/array/sequelize')      
       .expect(200)
       .expect(/paging/)
       .end((err, res) => {
@@ -56,6 +56,33 @@ describe('app', () => {
       })
   })
 
+  it ('object array paging', (done) => {
+    app.get('/array/paging', (req, res, next) => {
+      return res.data.setArrayObject([
+        { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
+        { "id": "11" }, { "id": "12" }, { "id": "13" }, { "id": "14" }, { "id": "15" }, { "id": "16" }, { "id": "17" }, { "id": "18" }, { "id": "19" }, { "id": "20" },
+      ], 200)
+    })
+
+    request(app)
+      .get('/array/paging')
+      .query({
+        "limit": "2",
+        "page": "5"
+      })
+      .expect(200)
+      .expect(/paging/)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        res.body.paging.currentPage.should.equal(5)
+        res.body.paging.perPage.should.equal(2)
+        done()
+      })
+  })
+
   it('202 - Accepted', (done) => {
     app.get('/accepted', (req, res, next) => {
       return res.data.setAccepted()
@@ -63,7 +90,7 @@ describe('app', () => {
 
     request(app)
       .get('/accepted')
-      .expect(202, done);
+      .expect(202, done)
   })  
 
   it('204 - no content', (done) => {
@@ -73,7 +100,7 @@ describe('app', () => {
 
     request(app)
       .get('/noContent')
-      .expect(204, done);
+      .expect(204, done)
   })
 
   it('204 - Delete Resource', (done) => {
@@ -83,7 +110,7 @@ describe('app', () => {
 
     request(app)
       .get('/deleteResource')
-      .expect(204, done);
+      .expect(204, done)
   })
 
   it('400 - Invalid Request', (done) => {
@@ -93,7 +120,7 @@ describe('app', () => {
 
     request(app)
       .get('/invalidRequest')
-      .expect(400, done);
+      .expect(400, done)
   })
 
   it('404 - Data not Found', (done) => {
@@ -103,7 +130,7 @@ describe('app', () => {
 
     request(app)
       .get('/dataNotFound')
-      .expect(404, done);
+      .expect(404, done)
   })
 
   it('500 - Internal Server Error', (done) => {
@@ -113,6 +140,6 @@ describe('app', () => {
 
     request(app)
       .get('/internalError')
-      .expect(500, done);
+      .expect(500, done)
   })
 })

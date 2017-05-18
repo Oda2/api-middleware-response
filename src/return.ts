@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
+import { Options } from './options';
 
-export class ReturnBase {
-  constructor(public self: any) {}
+export class Return {
+  constructor(public self: any,
+              private options: Options) {}
 
   private success: Boolean = false;
   private isArray: Boolean = false;
@@ -45,12 +47,13 @@ export class ReturnBase {
 
   private serializeArray(): Object {
     let pages: number = 0;
-        
+    this.limit = this.options.limit
+
     if (this.count > 0 && this.limit > 0) {
       pages = Math.ceil((this.count / this.limit ))
     }
 
-    let currentPage = (pages + 1);
+    let currentPage = (this.page + 1);
 
     /* TO-DO Custom return */
     return {
