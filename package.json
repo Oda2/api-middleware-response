@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "gulp",
     "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R test"
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha --colors --reporter test/"
   },
   "license": "MIT",
   "repository": {
@@ -22,6 +22,7 @@
     "url": "https://github.com/Oda2/api-middleware-response.git"
   },
   "devDependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.2",
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.6",

@@ -1,16 +1,20 @@
 const express = require('express')
 const request = require('supertest')
 const should = require('should')
+const bodyParser = require('body-parser')
 const apireturn = require('..')
 
 describe('app', () => {
   const app = express()
+  
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use(apireturn.apiresponse())
   
   it('object default', (done) => {  
     app.get('/object', (req, res, next) => {
-      return res.data.setObject({"id": "10"}, 200)
+      return res.data.setObject({"id": "10"})
     })
 
     request(app)
@@ -19,9 +23,33 @@ describe('app', () => {
       .expect({"id": "10"}, done)
   })
 
+  it('create resource', (done) => {  
+    app.post('/user', (req, res, next) => {
+      let newUser = {
+        id: "1",
+        name: req.body.name
+      }
+      return res.data.setObject(newUser, 201)
+    })
+
+    request(app)
+      .post('/user')
+      .send({"name": "Renato"})
+      .expect(201)
+      .end((err, res) => {
+        if (err) {
+          return done (new Error(err))
+        }
+
+        res.body.id.should.equal("1")
+        res.body.name.should.equal("Renato")
+        done()
+      })
+  })
+
   it('object array base', (done) => {
     app.get('/array/base', (req, res, next) => {
-      return res.data.setArrayObject([{"id": "10"}, {"id": "20"}], 200)
+      return res.data.setArrayObject([{"id": "10"}, {"id": "20"}])
     })
 
     request(app)
@@ -83,6 +111,16 @@ describe('app', () => {
       })
   })
 
+  it('error set array', (done) => {
+    app.get('/array/error', (req, res, next) => {
+      return res.data.setArrayObject({"id": "1", "name": "Renato"})
+    })
+
+    request(app)
+      .get('/array/error')
+      .expect(500, done)
+  })
+
   it('202 - Accepted', (done) => {
     app.get('/accepted', (req, res, next) => {
       return res.data.setAccepted()
@@ -121,6 +159,16 @@ describe('app', () => {
     request(app)
       .get('/invalidRequest')
       .expect(400, done)
+  })
+
+  it('401 - Not Authenticated', (done) => {
+    app.get('/invalidLogin', (req, res, next) => {
+      return res.data.setInvalidRequest("Not Authenticated", 401)
+    })
+
+    request(app)
+      .get('/invalidLogin')
+      .expect(401, done)
   })
 
   it('404 - Data not Found', (done) => {
