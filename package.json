@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "gulp",
     "test": "mocha",
-    "coverage": "x npm run test && istanbul cover node_modules/mocha/bin/mocha test/return.test.js"
+    "coverage": "istanbul cover _mocha -- -R test"
   },
   "license": "MIT",
   "repository": {
