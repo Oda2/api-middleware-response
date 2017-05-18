@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "gulp",
     "test": "mocha",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha --colors --reporter test/"
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha && istanbul-coveralls --colors --reporter test/"
   },
   "license": "MIT",
   "repository": {
@@ -27,6 +27,7 @@
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.6",
     "istanbul": "^0.4.5",
+    "istanbul-coveralls": "^1.0.3",
     "mocha": "^3.4.1",
     "should": "^11.2.1",
     "supertest": "^3.0.0",
