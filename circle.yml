@@ -7,6 +7,8 @@ dependencies:
 test:
   override:
     - yarn test
+  post:
+    - yarn coverage
 notify:
   webhooks:
     - url: https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN
