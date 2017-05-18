@@ -1,6 +1,6 @@
 {
   "name": "api-middleware-response",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "middleware for api http response",
   "main": "./index.js",
   "author": "Renato Oda",
@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "dev": "gulp",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "x npm run test && istanbul cover node_modules/mocha/bin/mocha test/return.test.js"
   },
   "license": "MIT",
   "repository": {
@@ -24,6 +25,7 @@
     "express": "^4.15.2",
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.6",
+    "istanbul": "^0.4.5",
     "mocha": "^3.4.1",
     "should": "^11.2.1",
     "supertest": "^3.0.0",
