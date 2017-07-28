@@ -1,10 +1,16 @@
+import { Header } from './header';
+
 export class Options {
   constructor(public limit?: number,
-    public header?: Object) {
+    public page?: number,
+    public header?: any) {
     if (!header) {
-      this.header = {
-        "contentType": "application/json"
-      }
+      this.header = new Header('application/json');
+      if (header) {
+        if (header.contentType) {
+          this.header.contentType = header.contentType;
+        }        
+      }      
     }
   }
 }

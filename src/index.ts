@@ -1,15 +1,30 @@
 import { Return } from './return';
 import { Options } from './options';
 
-function middlewareExpress(req, res, next): void {  
-  let limit = parseInt(req.query.limit) || 15;
-  let page = (parseInt(req.query.page) || 1) - 1;
+export = function apiResponse(options?: any) {    
+  return function (req, res, next) {
+    let limit = 15;
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
+    }
 
-  let options = new Options(limit);
-  
-  req.query.page = page;
-  res.data = new Return({req, res, next}, options);
-  next();
+    let page = 1;
+    if (req.query.page) {
+      page = (parseInt(req.query.page) - 1);
+    }    
+        
+    let _options = new Options(limit, page);    
+    if (options) {      
+      if (options.limit) {
+        _options.limit = options.limit;
+      }
+
+      if (options.header) {
+        _options.header = options.header;
+      }
+    }
+
+    res.data = new Return({ req, res, next }, _options);
+    next();
+  }
 }
-
-export = middlewareExpress

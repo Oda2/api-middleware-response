@@ -15,13 +15,14 @@ export class Return {
   private count: number;
 
   private setHeaders(): void {
-    this.self.res.contentType('application/json');
+    //this.self.res.contentType('application/json');
+    this.self.res.contentType(this.options.header.contentType);
   }
 
   public returnJson(): any {
     this.setHeaders();
-    this.limit = this.self.req.query.limit;
-    this.page = this.self.req.query.page;
+    this.limit = this.options.limit;
+    this.page = this.options.page;
     return this.self.res.status(this.statusCode).json(this.serialize());
   }
 
@@ -47,7 +48,6 @@ export class Return {
 
   private serializeArray(): Object {
     let pages: number = 0;
-    this.limit = this.options.limit
 
     if (this.count > 0 && this.limit > 0) {
       pages = Math.ceil((this.count / this.limit ))

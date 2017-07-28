@@ -7,12 +7,15 @@ const apireturn = require('..')
 describe('app', () => {
   const app = express()
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  const _returnArray = [
+    { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
+    { "id": "11" }, { "id": "12" }, { "id": "13" }, { "id": "14" }, { "id": "15" }, { "id": "16" }, { "id": "17" }, { "id": "18" }, { "id": "19" }, { "id": "20" },
+  ]
 
-  console.log(' app -> ', apireturn);
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
   
-  app.use(apireturn);
+  app.use(apireturn());
 
   it('object default', (done) => {
     app.get('/object', (req, res, next) => {
@@ -88,10 +91,7 @@ describe('app', () => {
 
   it('object array paging', (done) => {
     app.get('/array/paging', (req, res, next) => {
-      return res.data.setArrayObject([
-        { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
-        { "id": "11" }, { "id": "12" }, { "id": "13" }, { "id": "14" }, { "id": "15" }, { "id": "16" }, { "id": "17" }, { "id": "18" }, { "id": "19" }, { "id": "20" },
-      ], 200)
+      return res.data.setArrayObject(_returnArray, 200)
     })
 
     request(app)
@@ -106,7 +106,36 @@ describe('app', () => {
         if (err) {
           return done(new Error(err))
         }
+        
+        res.body.paging.total.should.equal(20)
+        res.body.paging.pages.should.equal(10)
+        res.body.paging.currentPage.should.equal(5)
+        res.body.paging.perPage.should.equal(2)
+        done()
+      })
+  })
 
+  it('object query remove limit in array paging', (done) => {
+    app.get('/array/paging', (req, res, next) => {
+      req.query = {};
+      return res.data.setArrayObject(_returnArray, 200)
+    })
+
+    request(app)
+      .get('/array/paging')
+      .query({
+        "limit": "2",
+        "page": "5"
+      })
+      .expect(200)
+      .expect(/paging/)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+        
+        res.body.paging.total.should.equal(20)
+        res.body.paging.pages.should.equal(10)
         res.body.paging.currentPage.should.equal(5)
         res.body.paging.perPage.should.equal(2)
         done()

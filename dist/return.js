@@ -9,12 +9,13 @@ class Return {
         this.isArray = false;
     }
     setHeaders() {
-        this.self.res.contentType('application/json');
+        //this.self.res.contentType('application/json');
+        this.self.res.contentType(this.options.header.contentType);
     }
     returnJson() {
         this.setHeaders();
-        this.limit = this.self.req.query.limit;
-        this.page = this.self.req.query.page;
+        this.limit = this.options.limit;
+        this.page = this.options.page;
         return this.self.res.status(this.statusCode).json(this.serialize());
     }
     serialize() {
@@ -35,7 +36,6 @@ class Return {
     }
     serializeArray() {
         let pages = 0;
-        this.limit = this.options.limit;
         if (this.count > 0 && this.limit > 0) {
             pages = Math.ceil((this.count / this.limit));
         }
