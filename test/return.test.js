@@ -107,10 +107,10 @@ describe('app', () => {
           return done(new Error(err))
         }
 
-        res.body.paging.total.should.equal(20)
-        res.body.paging.pages.should.equal(10)
-        res.body.paging.currentPage.should.equal(5)
-        res.body.paging.perPage.should.equal(2)
+        parseInt(res.body.paging.total).should.equal(20)
+        parseInt(res.body.paging.pages).should.equal(10)
+        parseInt(res.body.paging.currentPage).should.equal(5)
+        parseInt(res.body.paging.perPage).should.equal(2)
         done()
       })
   })
@@ -134,10 +134,10 @@ describe('app', () => {
           return done(new Error(err))
         }
 
-        res.body.paging.total.should.equal(20)
-        res.body.paging.pages.should.equal(10)
-        res.body.paging.currentPage.should.equal(5)
-        res.body.paging.perPage.should.equal(2)
+        parseInt(res.body.paging.total).should.equal(20)
+        parseInt(res.body.paging.pages).should.equal(10)
+        parseInt(res.body.paging.currentPage).should.equal(5)
+        parseInt(res.body.paging.perPage).should.equal(2)
         done()
       })
   })
@@ -277,7 +277,7 @@ describe('app options', () => {
   app.use(bodyParser.urlencoded({ extended: true }))
 
   app.use(apireturn({
-    limit: 1,
+    limit: 3,
     header: {
       contentType: 'application/json'
     }
@@ -310,7 +310,7 @@ describe('app options', () => {
     request(app)
       .get('/array/paging')
       .query({
-        "limit": "2",
+        "limit": "5",
         "page": "5"
       })
       .expect(200)
@@ -321,9 +321,9 @@ describe('app options', () => {
         }
 
         res.body.paging.total.should.equal(20)
-        res.body.paging.pages.should.equal(20)
+        res.body.paging.pages.should.equal(7)
         res.body.paging.currentPage.should.equal(5)
-        res.body.paging.perPage.should.equal(1)
+        res.body.paging.perPage.should.equal(3)
         done()
       })
   })

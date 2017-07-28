@@ -3,7 +3,7 @@ import { Options } from './options';
 
 export class Return {
   constructor(public self: any,
-              private options: Options) {}
+    private options: Options) { }
 
   private success: Boolean = false;
   private isArray: Boolean = false;
@@ -20,7 +20,17 @@ export class Return {
 
   public returnJson(): any {
     this.setHeaders();
-    this.limit = this.options.limit;
+
+    if (this.self.req.query.limit) {
+      if (this.self.req.query.limit > this.options.limit) {
+        this.limit = this.options.limit;
+      } else {
+        this.limit = this.self.req.query.limit;
+      }      
+    } else {
+      this.limit = this.options.limit;
+    }
+
     this.page = this.options.page;
     return this.self.res.status(this.statusCode).json(this.serialize());
   }
@@ -49,7 +59,7 @@ export class Return {
     let pages: number = 0;
 
     if (this.count > 0 && this.limit > 0) {
-      pages = Math.ceil((this.count / this.limit ))
+      pages = Math.ceil((this.count / this.limit))
     }
 
     let currentPage = (this.page + 1);
@@ -86,7 +96,7 @@ export class Return {
     return this.returnJson();
   }
 
-  public setArrayObject(data: any, statusCode?: number): any {    
+  public setArrayObject(data: any, statusCode?: number): any {
     this.success = true;
     this.isArray = true;
 
@@ -131,11 +141,11 @@ export class Return {
     return this.setDeleteResource();
   }
 
-  public setInvalidRequest(message: string, statusCode?:number): any {
+  public setInvalidRequest(message: string, statusCode?: number): any {
     this.data = {};
     this.success = false;
     this.message = message;
-    
+
     if (statusCode) {
       this.statusCode = statusCode;
     } else {
@@ -145,7 +155,7 @@ export class Return {
     return this.returnJson();
   }
 
-  public setDataNotFound(message?:string): any {
+  public setDataNotFound(message?: string): any {
     this.data = {};
     this.success = false;
     this.statusCode = 404;
@@ -155,7 +165,7 @@ export class Return {
     return this.returnJson();
   }
 
-  public setInternalServerError(message?:string) {
+  public setInternalServerError(message?: string) {
     this.data = {};
     this.success = false;
     this.statusCode = 500;

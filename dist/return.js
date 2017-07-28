@@ -9,12 +9,21 @@ class Return {
         this.isArray = false;
     }
     setHeaders() {
-        //this.self.res.contentType('application/json');
         this.self.res.contentType(this.options.header.contentType);
     }
     returnJson() {
         this.setHeaders();
-        this.limit = this.options.limit;
+        if (this.self.req.query.limit) {
+            if (this.self.req.query.limit > this.options.limit) {
+                this.limit = this.options.limit;
+            }
+            else {
+                this.limit = this.self.req.query.limit;
+            }
+        }
+        else {
+            this.limit = this.options.limit;
+        }
         this.page = this.options.page;
         return this.self.res.status(this.statusCode).json(this.serialize());
     }

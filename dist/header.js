@@ -4,7 +4,7 @@ class Header {
     constructor(contentType) {
         this.contentType = contentType;
         if (!contentType) {
-            contentType = "application/json";
+            this.contentType = "application/json";
         }
     }
 }

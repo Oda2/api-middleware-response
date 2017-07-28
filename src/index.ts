@@ -1,5 +1,6 @@
 import { Return } from './return';
 import { Options } from './options';
+import { Header } from './header';
 
 export = function apiResponse(options?: any) {
   return function (req, res, next) {
@@ -13,17 +14,24 @@ export = function apiResponse(options?: any) {
       page = (parseInt(req.query.page) - 1);
     }
 
-    let _options = new Options(limit, page);
+    let header = null;
     if (options) {
-      if (options.limit) {
-        _options.limit = options.limit;
-      }
-
       if (options.header) {
-        _options.header = options.header;
+        if (options.header.contentType) {
+          header = new Header(options.header.contentType);
+        }
+
+        if (options.limit) {          
+          limit = options.limit;
+        }
       }
     }
 
+    if (!header) {
+      header = new Header();      
+    }
+
+    let _options = new Options(header, limit, page);
     res.data = new Return({ req, res, next }, _options);
     next();
   }
