@@ -9,6 +9,8 @@ export = function apiResponse(options?: any) {
 
     if (req.query.page) {
       page = (parseInt(req.query.page) - 1);
+    } else {
+      req.query.page = page;
     }
 
     let header = null;
@@ -22,6 +24,14 @@ export = function apiResponse(options?: any) {
       if (options.limit) {
         limit = options.limit;
       }
+    }
+
+    if (req.query.limit) {
+      if (req.query.limit < limit) {
+        limit = req.query.limit;
+      }
+    } else {
+      req.query.limit = limit;
     }
 
     if (!header) {

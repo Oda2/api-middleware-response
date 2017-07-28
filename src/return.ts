@@ -20,18 +20,8 @@ export class Return {
 
   public returnJson(): any {
     this.setHeaders();
-
-    if (this.self.req.query.limit) {
-      if (this.self.req.query.limit > this.options.limit) {
-        this.limit = this.options.limit;
-      } else {
-        this.limit = this.self.req.query.limit;
-      }      
-    } else {
-      this.limit = this.options.limit;
-    }
-
     this.page = this.options.page;
+    this.limit = this.options.limit;
     return this.self.res.status(this.statusCode).json(this.serialize());
   }
 

@@ -9,6 +9,9 @@ module.exports = function apiResponse(options) {
         if (req.query.page) {
             page = (parseInt(req.query.page) - 1);
         }
+        else {
+            req.query.page = page;
+        }
         let header = null;
         if (options) {
             if (options.header) {
@@ -19,6 +22,14 @@ module.exports = function apiResponse(options) {
             if (options.limit) {
                 limit = options.limit;
             }
+        }
+        if (req.query.limit) {
+            if (req.query.limit < limit) {
+                limit = req.query.limit;
+            }
+        }
+        else {
+            req.query.limit = limit;
         }
         if (!header) {
             header = new header_1.Header();

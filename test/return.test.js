@@ -355,4 +355,16 @@ describe('app options', () => {
       })
   })
 
+  it('request test query', (done) => {
+    app.get('/array/query', (req, res, next) => {
+      parseInt(req.query.page).should.equal(1)
+      parseInt(req.query.limit).should.equal(3);
+      return res.data.setArrayObject(_returnArray, 200)
+    })
+
+    request(app)
+      .get('/array/query')
+      .expect(200, done)
+  })
+
 });
