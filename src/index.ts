@@ -4,12 +4,9 @@ import { Header } from './header';
 
 export = function apiResponse(options?: any) {
   return function (req, res, next) {
-    let limit = 15;
-    if (req.query.limit) {
-      limit = parseInt(req.query.limit);
-    }
-
     let page = 1;
+    let limit = 15;
+
     if (req.query.page) {
       page = (parseInt(req.query.page) - 1);
     }
@@ -20,15 +17,15 @@ export = function apiResponse(options?: any) {
         if (options.header.contentType) {
           header = new Header(options.header.contentType);
         }
+      }
 
-        if (options.limit) {          
-          limit = options.limit;
-        }
+      if (options.limit) {
+        limit = options.limit;
       }
     }
 
     if (!header) {
-      header = new Header();      
+      header = new Header();
     }
 
     let _options = new Options(header, limit, page);

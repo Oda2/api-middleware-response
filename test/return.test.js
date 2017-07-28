@@ -15,7 +15,7 @@ describe('app', () => {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  app.use(apireturn());
+  app.use(apireturn())
 
   it('object default', (done) => {
     app.get('/object', (req, res, next) => {
@@ -25,7 +25,15 @@ describe('app', () => {
     request(app)
       .get('/object')
       .expect(200)
-      .expect({ "id": "10" }, done)
+      .expect({ "id": "10" })
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err));          
+        }
+
+        res.header['content-type'].should.equal('application/json; charset=utf-8');
+        done();
+      });
   })
 
   it('create resource', (done) => {
@@ -192,6 +200,25 @@ describe('app', () => {
       .expect(400, done)
   })
 
+  it('400 - Invalid Request Message', (done) => {
+    app.get('/invalidRequestMessage', (req, res, next) => {
+      return res.data.setInvalidRequest('description is required')
+    })
+
+    request(app)
+      .get('/invalidRequestMessage')
+      .expect(400)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err));
+        }
+
+        res.body.success.should.equal(false)
+        res.body.message.should.equal('description is required')
+        done();
+      })
+  })
+
   it('401 - Not Authenticated', (done) => {
     app.get('/invalidLogin', (req, res, next) => {
       return res.data.setInvalidRequest("Not Authenticated", 401)
@@ -302,7 +329,7 @@ describe('app options', () => {
       });
   })
 
-  it('object array paging', (done) => {
+  it('object array paging limit', (done) => {
     app.get('/array/paging', (req, res, next) => {
       return res.data.setArrayObject(_returnArray, 200)
     })
@@ -320,10 +347,10 @@ describe('app options', () => {
           return done(new Error(err))
         }
 
-        res.body.paging.total.should.equal(20)
-        res.body.paging.pages.should.equal(7)
-        res.body.paging.currentPage.should.equal(5)
-        res.body.paging.perPage.should.equal(3)
+        parseInt(res.body.paging.total).should.equal(20)
+        parseInt(res.body.paging.pages).should.equal(7)
+        parseInt(res.body.paging.currentPage).should.equal(5)
+        parseInt(res.body.paging.perPage).should.equal(3)
         done()
       })
   })
