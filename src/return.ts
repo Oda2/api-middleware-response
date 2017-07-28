@@ -146,10 +146,13 @@ export class Return {
     return this.returnJson();
   }
 
-  public setDataNotFound(): any {
+  public setDataNotFound(message?:string): any {
     this.data = {};
     this.success = false;
-    this.statusCode = 404;    
+    this.statusCode = 404;
+    if (message) {
+      this.message = message;
+    }    
     return this.returnJson();
   }
 

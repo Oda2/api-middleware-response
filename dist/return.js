@@ -120,10 +120,13 @@ class Return {
         }
         return this.returnJson();
     }
-    setDataNotFound() {
+    setDataNotFound(message) {
         this.data = {};
         this.success = false;
         this.statusCode = 404;
+        if (message) {
+            this.message = message;
+        }
         return this.returnJson();
     }
     setInternalServerError(message) {

@@ -6,24 +6,26 @@ const apireturn = require('..')
 
 describe('app', () => {
   const app = express()
-  
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.use(apireturn.apiresponse())
+  console.log(' app -> ', apireturn);
   
-  it('object default', (done) => {  
+  app.use(apireturn);
+
+  it('object default', (done) => {
     app.get('/object', (req, res, next) => {
-      return res.data.setObject({"id": "10"})
+      return res.data.setObject({ "id": "10" })
     })
 
     request(app)
       .get('/object')
       .expect(200)
-      .expect({"id": "10"}, done)
+      .expect({ "id": "10" }, done)
   })
 
-  it('create resource', (done) => {  
+  it('create resource', (done) => {
     app.post('/user', (req, res, next) => {
       let newUser = {
         id: "1",
@@ -34,11 +36,11 @@ describe('app', () => {
 
     request(app)
       .post('/user')
-      .send({"name": "Renato"})
+      .send({ "name": "Renato" })
       .expect(201)
       .end((err, res) => {
         if (err) {
-          return done (new Error(err))
+          return done(new Error(err))
         }
 
         res.body.id.should.equal("1")
@@ -49,7 +51,7 @@ describe('app', () => {
 
   it('object array base', (done) => {
     app.get('/array/base', (req, res, next) => {
-      return res.data.setArrayObject([{"id": "10"}, {"id": "20"}])
+      return res.data.setArrayObject([{ "id": "10" }, { "id": "20" }])
     })
 
     request(app)
@@ -58,20 +60,20 @@ describe('app', () => {
       .expect(/paging/, done)
   })
 
-  it ('object array sequelize', (done) => {
+  it('object array sequelize', (done) => {
     app.get('/array/sequelize', (req, res, next) => {
       return res.data.setArrayObject(
         {
-          "count": "10", 
+          "count": "10",
           "rows": [
-            {"id": "10"}, 
-            {"id": "20"}
+            { "id": "10" },
+            { "id": "20" }
           ]
-      }, 200)
+        }, 200)
     })
 
     request(app)
-      .get('/array/sequelize')      
+      .get('/array/sequelize')
       .expect(200)
       .expect(/paging/)
       .end((err, res) => {
@@ -79,12 +81,12 @@ describe('app', () => {
           return done(new Error(err))
         }
 
-        res.body.data.should.not.containEql({"count": "10"})        
+        res.body.data.should.not.containEql({ "count": "10" })
         done()
       })
   })
 
-  it ('object array paging', (done) => {
+  it('object array paging', (done) => {
     app.get('/array/paging', (req, res, next) => {
       return res.data.setArrayObject([
         { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
@@ -113,7 +115,7 @@ describe('app', () => {
 
   it('error set array', (done) => {
     app.get('/array/error', (req, res, next) => {
-      return res.data.setArrayObject({"id": "1", "name": "Renato"})
+      return res.data.setArrayObject({ "id": "1", "name": "Renato" })
     })
 
     request(app)
@@ -129,7 +131,7 @@ describe('app', () => {
     request(app)
       .get('/accepted')
       .expect(202, done)
-  })  
+  })
 
   it('204 - no content', (done) => {
     app.get('/noContent', (req, res, next) => {
@@ -168,7 +170,16 @@ describe('app', () => {
 
     request(app)
       .get('/invalidLogin')
-      .expect(401, done)
+      .expect(401)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        res.body.success.should.equal(false)
+        res.body.message.should.equal('Not Authenticated')
+        done()
+      });
   })
 
   it('404 - Data not Found', (done) => {
@@ -181,6 +192,25 @@ describe('app', () => {
       .expect(404, done)
   })
 
+  it('404 - Data not Found Message', (done) => {
+    app.get('/dataNotFoundMessage', (req, res, next) => {
+      return res.data.setDataNotFound('user not found');
+    })
+
+    request(app)
+      .get('/dataNotFoundMessage')
+      .expect(404)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+        
+        res.body.success.should.equal(false)
+        res.body.message.should.equal('user not found');
+        done()
+      });
+  })
+
   it('500 - Internal Server Error', (done) => {
     app.get('/internalError', (req, res, next) => {
       return res.data.setInternalServerError()
@@ -189,5 +219,24 @@ describe('app', () => {
     request(app)
       .get('/internalError')
       .expect(500, done)
+  })
+
+  it('500 - Internal Server Error Message', (done) => {
+    app.get('/internalErrorMessage', (req, res, next) => {
+      return res.data.setInternalServerError('ConnectionRefusedError')
+    })
+
+    request(app)
+      .get('/internalErrorMessage')
+      .expect(500)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+        
+        res.body.success.should.equal(false)
+        res.body.message.should.equal('ConnectionRefusedError');
+        done()
+      })
   })
 })
