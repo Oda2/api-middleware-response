@@ -4,17 +4,17 @@ const should = require('should')
 const bodyParser = require('body-parser')
 const apireturn = require('..')
 
+const _returnArray = [
+  { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
+  { "id": "11" }, { "id": "12" }, { "id": "13" }, { "id": "14" }, { "id": "15" }, { "id": "16" }, { "id": "17" }, { "id": "18" }, { "id": "19" }, { "id": "20" },
+]
+
 describe('app', () => {
   const app = express()
 
-  const _returnArray = [
-    { "id": "1" }, { "id": "2" }, { "id": "3" }, { "id": "4" }, { "id": "5" }, { "id": "6" }, { "id": "7" }, { "id": "8" }, { "id": "9" }, { "id": "10" },
-    { "id": "11" }, { "id": "12" }, { "id": "13" }, { "id": "14" }, { "id": "15" }, { "id": "16" }, { "id": "17" }, { "id": "18" }, { "id": "19" }, { "id": "20" },
-  ]
-
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
-  
+
   app.use(apireturn());
 
   it('object default', (done) => {
@@ -106,7 +106,7 @@ describe('app', () => {
         if (err) {
           return done(new Error(err))
         }
-        
+
         res.body.paging.total.should.equal(20)
         res.body.paging.pages.should.equal(10)
         res.body.paging.currentPage.should.equal(5)
@@ -133,7 +133,7 @@ describe('app', () => {
         if (err) {
           return done(new Error(err))
         }
-        
+
         res.body.paging.total.should.equal(20)
         res.body.paging.pages.should.equal(10)
         res.body.paging.currentPage.should.equal(5)
@@ -233,7 +233,7 @@ describe('app', () => {
         if (err) {
           return done(new Error(err))
         }
-        
+
         res.body.success.should.equal(false)
         res.body.message.should.equal('user not found');
         done()
@@ -262,10 +262,44 @@ describe('app', () => {
         if (err) {
           return done(new Error(err))
         }
-        
+
         res.body.success.should.equal(false)
         res.body.message.should.equal('ConnectionRefusedError');
         done()
       })
   })
 })
+
+describe('app options', () => {
+  const app = express()
+
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+
+  app.use(apireturn({
+    limit: 1,
+    header: {
+      contentType: 'application/json'
+    }
+  }));
+
+  it('object default', (done) => {
+    app.get('/object', (req, res, next) => {
+      return res.data.setObject({ "id": "10" })
+    })
+
+    request(app)
+      .get('/object')
+      .expect(200)
+      .expect({ "id": "10" })
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err));
+        }
+
+        res.header['content-type'].should.equal('application/json; charset=utf-8');
+        done();
+      });
+  })
+
+});

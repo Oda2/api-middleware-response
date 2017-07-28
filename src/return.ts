@@ -15,7 +15,6 @@ export class Return {
   private count: number;
 
   private setHeaders(): void {
-    //this.self.res.contentType('application/json');
     this.self.res.contentType(this.options.header.contentType);
   }
 
@@ -152,7 +151,7 @@ export class Return {
     this.statusCode = 404;
     if (message) {
       this.message = message;
-    }    
+    }
     return this.returnJson();
   }
 

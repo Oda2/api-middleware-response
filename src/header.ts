@@ -1,6 +1,6 @@
 export class Header {
   constructor(public contentType?: string) {
-    if (!contentType) {      
+    if (!contentType) {
       contentType = "application/json";
     }
   }
