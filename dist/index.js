@@ -4,7 +4,7 @@ const options_1 = require("./options");
 const header_1 = require("./header");
 module.exports = function apiResponse(options) {
     return function (req, res, next) {
-        let page = 1;
+        let page = 0;
         let limit = 15;
         if (req.query.page) {
             page = (parseInt(req.query.page) - 1);

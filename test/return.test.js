@@ -28,12 +28,12 @@ describe('app', () => {
       .expect({ "id": "10" })
       .end((err, res) => {
         if (err) {
-          return done(new Error(err));          
+          return done(new Error(err))          
         }
 
-        res.header['content-type'].should.equal('application/json; charset=utf-8');
-        done();
-      });
+        res.header['content-type'].should.equal('application/json; charset=utf-8')
+        done()
+      })
   })
 
   it('create resource', (done) => {
@@ -125,7 +125,7 @@ describe('app', () => {
 
   it('object query remove limit in array paging', (done) => {
     app.get('/array/paging', (req, res, next) => {
-      req.query = {};
+      req.query = {}
       return res.data.setArrayObject(_returnArray, 200)
     })
 
@@ -210,12 +210,12 @@ describe('app', () => {
       .expect(400)
       .end((err, res) => {
         if (err) {
-          return done(new Error(err));
+          return done(new Error(err))
         }
 
         res.body.success.should.equal(false)
         res.body.message.should.equal('description is required')
-        done();
+        done()
       })
   })
 
@@ -235,7 +235,7 @@ describe('app', () => {
         res.body.success.should.equal(false)
         res.body.message.should.equal('Not Authenticated')
         done()
-      });
+      })
   })
 
   it('404 - Data not Found', (done) => {
@@ -250,7 +250,7 @@ describe('app', () => {
 
   it('404 - Data not Found Message', (done) => {
     app.get('/dataNotFoundMessage', (req, res, next) => {
-      return res.data.setDataNotFound('user not found');
+      return res.data.setDataNotFound('user not found')
     })
 
     request(app)
@@ -262,9 +262,9 @@ describe('app', () => {
         }
 
         res.body.success.should.equal(false)
-        res.body.message.should.equal('user not found');
+        res.body.message.should.equal('user not found')
         done()
-      });
+      })
   })
 
   it('500 - Internal Server Error', (done) => {
@@ -291,7 +291,7 @@ describe('app', () => {
         }
 
         res.body.success.should.equal(false)
-        res.body.message.should.equal('ConnectionRefusedError');
+        res.body.message.should.equal('ConnectionRefusedError')
         done()
       })
   })
@@ -308,7 +308,7 @@ describe('app options', () => {
     header: {
       contentType: 'application/json'
     }
-  }));
+  }))
 
   it('object default', (done) => {
     app.get('/object', (req, res, next) => {
@@ -321,12 +321,12 @@ describe('app options', () => {
       .expect({ "id": "10" })
       .end((err, res) => {
         if (err) {
-          return done(new Error(err));
+          return done(new Error(err))
         }
 
-        res.header['content-type'].should.equal('application/json; charset=utf-8');
-        done();
-      });
+        res.header['content-type'].should.equal('application/json; charset=utf-8')
+        done()
+      })
   })
 
   it('object array paging limit', (done) => {
@@ -357,14 +357,69 @@ describe('app options', () => {
 
   it('request test query', (done) => {
     app.get('/array/query', (req, res, next) => {
-      parseInt(req.query.page).should.equal(1)
-      parseInt(req.query.limit).should.equal(3);
       return res.data.setArrayObject(_returnArray, 200)
     })
 
     request(app)
       .get('/array/query')
-      .expect(200, done)
+      .expect(200)
+      .expect(/paging/)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        parseInt(res.body.paging.total).should.equal(20)
+        parseInt(res.body.paging.pages).should.equal(7)
+        parseInt(res.body.paging.currentPage).should.equal(1)
+        parseInt(res.body.paging.perPage).should.equal(3)
+        done()
+      })
   })
 
-});
+  it('request test query optional', (done) => {
+    app.get('/array/query/optional', (req, res, next) => {
+      return res.data.setArrayObject(_returnArray, 200)
+    })
+
+    request(app)
+      .get('/array/query/optional')
+      .query({
+        "limit": "2",
+        "page": "10"
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        parseInt(res.body.paging.total).should.equal(20)
+        parseInt(res.body.paging.pages).should.equal(10)
+        parseInt(res.body.paging.currentPage).should.equal(10)
+        parseInt(res.body.paging.perPage).should.equal(2)
+
+        done()
+      })
+  })
+
+  it ('request query page (offset)', (done) => {
+    app.get('/array/query/page', (req, res, next) => {
+      parseInt(req.query.page).should.equal(0)
+      return res.data.setArrayObject(_returnArray, 200)
+    })
+
+    request(app)
+      .get('/array/query/page')
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        parseInt(res.body.paging.currentPage).should.equal(1)
+        done()
+      })
+  })
+
+})

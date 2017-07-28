@@ -4,7 +4,7 @@ import { Header } from './header';
 
 export = function apiResponse(options?: any) {
   return function (req, res, next) {
-    let page = 1;
+    let page = 0;
     let limit = 15;
 
     if (req.query.page) {
