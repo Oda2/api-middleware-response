@@ -302,4 +302,30 @@ describe('app options', () => {
       });
   })
 
+  it('object array paging', (done) => {
+    app.get('/array/paging', (req, res, next) => {
+      return res.data.setArrayObject(_returnArray, 200)
+    })
+
+    request(app)
+      .get('/array/paging')
+      .query({
+        "limit": "2",
+        "page": "5"
+      })
+      .expect(200)
+      .expect(/paging/)
+      .end((err, res) => {
+        if (err) {
+          return done(new Error(err))
+        }
+
+        res.body.paging.total.should.equal(20)
+        res.body.paging.pages.should.equal(20)
+        res.body.paging.currentPage.should.equal(5)
+        res.body.paging.perPage.should.equal(1)
+        done()
+      })
+  })
+
 });
